@@ -26,7 +26,7 @@ public class SecurityConfig {
     public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
-
+    // add jwt filter before standard filter
     // create AuthenticationManager which is the "boss" of the authentication process
     @Bean
     public AuthenticationManager authenticationManager(
@@ -81,24 +81,4 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
