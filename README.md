@@ -1,6 +1,8 @@
 # Spring Security
-## Du hittar hela kod exemplet på branchen demo-branch
-## Start koden finns på main branchen
+## Det finns tre olika branches i repot:
+- **main** startkoden från första genomgången
+- **demo-branch** koden från andra genomgången alltså full setup av Spring Security
+- **dto-example** koden från tredje genomgången med DTO
 
 ### API dokumentation
 https://documenter.getpostman.com/view/12882046/2sAYX8JM2K
