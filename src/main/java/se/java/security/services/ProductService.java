@@ -34,6 +34,48 @@ public class ProductService {
         return productRepository.findById(id);
     }
 
+    // PUT
+    public Product updateProduct(String id, Product product) {
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
+
+        existingProduct.setName(product.getName());
+        existingProduct.setPrice(product.getPrice());
+        existingProduct.setDescription(product.getDescription());
+
+        return productRepository.save(existingProduct);
+    }
+
+    // PATCH
+    public Product patchProduct(String id, Product product) {
+        Product existingProduct = productRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + id));
+
+        // uppdatera endast icke null fält
+        if (product.getName() != null) {
+            existingProduct.setName(product.getName());
+        }
+
+        if (product.getPrice() != null) {
+            existingProduct.setPrice(product.getPrice());
+        }
+
+        if (product.getDescription() != null) {
+            existingProduct.setDescription(product.getDescription());
+        }
+        return productRepository.save(existingProduct);
+    }
+
+
+
+
+
+
+
+
+
+
+
     public void deleteProduct(String id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));
