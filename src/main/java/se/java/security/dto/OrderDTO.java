@@ -22,4 +22,12 @@ public class OrderDTO {
     public @NotNull(message = "Order must contain at least one item") List<OrderItemDTO> getItems() {
         return items;
     }
+
+    public void setCustomerId(@NotNull(message = "Customer id is required") String customerId) {
+        this.customerId = customerId;
+    }
+
+    public void setItems(@NotNull(message = "Order must contain at least one item") List<OrderItemDTO> items) {
+        this.items = items;
+    }
 }
