@@ -15,47 +15,45 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    // secret key to generate tokens
+
     @Value("${jwt.secret}")
     private String jwtSecret;
 
-    // how long token is valid (milli sek)
+
     @Value("${jwt.expirationMs}")
     private int jwtExpirationMs;
 
-    // create encrypted key based on our secret values
-    private Key getSigninKey() {
+
+    private Key getSigningKey() {
         byte[] keyBytes = jwtSecret.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // generate token
     public String generateToken(UserDetails userDetails) {
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + jwtExpirationMs))
-                .signWith(getSigninKey(), SignatureAlgorithm.HS256)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    // validate token
     public boolean validateToken(String token, UserDetails userDetails) {
         try {
             String username = extractUsername(token);
-                return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
-
+            return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
         } catch (JwtException | IllegalArgumentException e) {
+
             return false;
         }
     }
 
-    // extract username from token
+
     public String extractUsername(String token) {
         return extractAllClaims(token).getSubject();
     }
 
-    // check if token is expired
+
     private boolean isTokenExpired(String token) {
         Date expiration = extractAllClaims(token).getExpiration();
         return expiration.before(new Date());
@@ -64,28 +62,9 @@ public class JwtUtil {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(getSigninKey())
+                .setSigningKey(getSigningKey())
                 .build()
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

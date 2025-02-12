@@ -46,9 +46,10 @@ public class SecurityConfig {
                 // define URL based rules
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/products/**").hasRole("ADMIN")
+                        //.requestMatchers("/products/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/products/**").permitAll()
                         // any other requests the user need to be logged
                         .anyRequest().authenticated()
                 )
