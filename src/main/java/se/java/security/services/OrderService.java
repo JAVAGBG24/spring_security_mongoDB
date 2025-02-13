@@ -1,10 +1,15 @@
 package se.java.security.services;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import se.java.security.dto.OrderDTO;
 import se.java.security.dto.OrderItemDTO;
 import se.java.security.dto.OrderResponse;
 import se.java.security.exceptions.ResourceNotFoundException;
+import se.java.security.exceptions.UnauthorizedException;
 import se.java.security.models.Order;
 import se.java.security.models.Product;
 import se.java.security.models.User;
@@ -32,7 +37,13 @@ public class OrderService {
 
     // skapa en ny order
     public Order createOrder(OrderDTO orderDTO) {
-        User user = userRepository.findById(orderDTO.getCustomerId())
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+            throw new UnauthorizedException("User is not authenticated");
+        }
+
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User user = userRepository.findByUsername(userDetails.getUsername())
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
         // tom lista

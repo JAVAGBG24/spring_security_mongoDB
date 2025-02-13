@@ -2,10 +2,12 @@ package se.java.security.models;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -29,6 +31,8 @@ public class Order {
 
     private Map<String, Integer> quantities;
 
+    @CreatedDate
+    private Date createdAt;
 
     public Order() {
     }
@@ -72,5 +76,13 @@ public class Order {
 
     public void setQuantities(Map<String, Integer> quantities) {
         this.quantities = quantities;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }

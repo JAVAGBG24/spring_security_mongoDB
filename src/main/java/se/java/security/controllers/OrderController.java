@@ -25,18 +25,11 @@ public class OrderController {
         return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
     }
 
-    /*@GetMapping("/all")
-    public ResponseEntity<List<OrderResponse>> getAllOrders() {
-        List<OrderResponse> orders = orderService.getAllOrders();
-        return ResponseEntity.ok(orders);
-    }*/
-
     @GetMapping("/all")
     public ResponseEntity<List<OrderResponse>> getAllOrders() {
         List<OrderResponse> orders = orderService.getAllOrders();
         return ResponseEntity.ok(orders);
     }
-
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<OrderResponse>> getUserOrders(@PathVariable String userId) {
