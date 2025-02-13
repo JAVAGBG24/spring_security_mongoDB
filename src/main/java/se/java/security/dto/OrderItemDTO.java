@@ -3,11 +3,19 @@ package se.java.security.dto;
 public class OrderItemDTO {
     // vilken produkt
     private String productId;
-
+    private String name;
+    private double price;
     // hur många an produkten har man köpt
     private int quantity;
 
     public OrderItemDTO() {
+    }
+
+    public OrderItemDTO(String productId, String name, double price, int quantity) {
+        this.productId = productId;
+        this.name = name;
+        this.price = price;
+        this.quantity = quantity;
     }
 
     public String getProductId() {
@@ -24,5 +32,21 @@ public class OrderItemDTO {
 
     public void setQuantity(int quantity) {
         this.quantity = quantity;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import se.java.security.dto.OrderDTO;
 import se.java.security.dto.OrderItemDTO;
 import se.java.security.dto.OrderResponse;
+import se.java.security.dto.OrderResponseDTO;
 import se.java.security.exceptions.ResourceNotFoundException;
 import se.java.security.exceptions.UnauthorizedException;
 import se.java.security.models.Order;
@@ -35,8 +36,11 @@ public class OrderService {
         this.userRepository = userRepository;
     }
 
+
+
     // skapa en ny order
-    public Order createOrder(OrderDTO orderDTO) {
+    // byter typ när vi gjort OrderResponseDTO från Order
+    public OrderResponseDTO createOrder(OrderDTO orderDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
             throw new UnauthorizedException("User is not authenticated");
@@ -67,7 +71,10 @@ public class OrderService {
         newOrder.setQuantities(quantities);
         newOrder.setTotalAmount(totalAmount);
 
-        return orderRepository.save(newOrder);
+        Order savedOrder = orderRepository.save(newOrder);
+
+       // return orderRepository.save(newOrder);
+        return convertToOrderResponseDTO(savedOrder);
     }
 
     public List<OrderResponse> getAllOrders() {
@@ -99,6 +106,34 @@ public class OrderService {
                 .collect(Collectors.toList());
     }
 
+    private OrderResponseDTO convertToOrderResponseDTO(Order order) {
+        List<OrderItemDTO> itemDTOs = order.getItems().stream()
+                .map(product -> {
+                    String productId = product.getId();
+                    String name = product.getName();
+                    double price = product.getPrice();
+                    int quantity = order.getQuantities().getOrDefault(productId, 0);
+                    return new OrderItemDTO(productId, name, price, quantity);
+                })
+                .collect(Collectors.toList());
+
+        Map<String, String> quantities = order.getQuantities().entrySet().stream()
+                .collect(Collectors.toMap(
+                        entry -> entry.getKey(),
+                        entry -> productRepository.findById(entry.getKey())
+                                .map(Product::getName)
+                                .orElse("Product not found")
+                ));
+        return new OrderResponseDTO(
+                order.getId(),
+                order.getCustomer().getId(),
+                order.getTotalAmount(),
+                itemDTOs,
+                quantities,
+                order.getCreatedAt().toString()
+        );
+    }
+
 
     private OrderResponse convertToDTO(Order order) {
         OrderResponse orderResponse = new OrderResponse();
@@ -112,16 +147,7 @@ public class OrderService {
         );
 
         return orderResponse;
-        /*OrderResponse orderResponse = new OrderResponse();
 
-        orderResponse.setUserId(order.getCustomer().getId());
-
-        orderResponse.setOrderedProductIds(
-                order.getItems().stream()
-                        .map(Product::getId)
-                        .collect(Collectors.toList())
-        );
-        return orderResponse;*/
     }
 
 
