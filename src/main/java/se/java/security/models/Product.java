@@ -22,6 +22,8 @@ public class Product {
     @Positive(message = "Price must be greater than 0")
     private Double price;
 
+    private String image;
+
     private String description;
 
     @CreatedDate
@@ -68,5 +70,13 @@ public class Product {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
