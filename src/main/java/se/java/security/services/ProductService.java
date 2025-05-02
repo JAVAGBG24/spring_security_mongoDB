@@ -4,10 +4,13 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import se.java.security.exceptions.ResourceNotFoundException;
+import se.java.security.models.Category;
 import se.java.security.models.Product;
+import se.java.security.models.Sizes;
 import se.java.security.repository.ProductRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -40,6 +43,60 @@ public class ProductService {
     public Optional<Product> getProductById(String id) {
         return productRepository.findById(id);
     }
+
+
+    public List<Product> getProductsByColor(String color) {
+        return productRepository.findByColor(color);
+    }
+
+    public List<Product> getProductsByCategory(Category category) {
+        return productRepository.findByCategory(category);
+    }
+
+    public List<Product> getProductsByPriceRange(Double minPrice, Double maxPrice) {
+        return productRepository.findByPriceBetween(minPrice, maxPrice);
+    }
+
+    // Size-specific inventory methods
+    public List<Product> getProductsBySizeInStock(Sizes size) {
+        return productRepository.findBySizeInStock(size);
+    }
+
+    public List<Product> getProductsByColorAndSizeInStock(String color, Sizes size) {
+        return productRepository.findByColorAndSizeInStock(color, size);
+    }
+
+    public List<Product> getProductsByCategoryAndSizeInStock(Category category, Sizes size) {
+        return productRepository.findByCategoryAndSizeInStock(category, size);
+    }
+
+    public List<Product> getProductsByPriceRangeAndSizeInStock(Double minPrice, Double maxPrice, Sizes size) {
+        return productRepository.findByPriceRangeAndSizeInStock(minPrice, maxPrice, size);
+    }
+
+    @CacheEvict(value = {"products", "productById"}, allEntries = true)
+    public Product updateInventory(String productId, Map<Sizes, Integer> inventoryUpdates) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + productId));
+
+        if (product.getInventory() == null) {
+            product.setInventory(inventoryUpdates);
+        } else {
+            product.getInventory().putAll(inventoryUpdates);
+        }
+
+        return productRepository.save(product);
+    }
+
+    @CacheEvict(value = {"products", "productById"}, allEntries = true)
+    public Product updateInventoryForSize(String productId, Sizes size, int quantity) {
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found with id " + productId));
+
+        product.updateInventory(size, quantity);
+        return productRepository.save(product);
+    }
+
 
 
 
