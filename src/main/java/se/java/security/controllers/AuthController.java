@@ -66,7 +66,10 @@ public class AuthController {
         RegisterResponse response = new RegisterResponse(
                 "User registered successfully",
                 user.getUsername(),
-                user.getRoles()
+                user.getRoles(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName()
         );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -104,7 +107,12 @@ public class AuthController {
             AuthResponse authResponse = new AuthResponse(
                     "Login successful",
                     userDetails.getUsername(),
-                    userService.findByUsername(userDetails.getUsername()).getRoles()
+                    userService.findByUsername(userDetails.getUsername()).getRoles(),
+                    userService.findByUsername(userDetails.getUsername()).getEmail(),
+                    userService.findByUsername(userDetails.getUsername()).getFirstName(),
+                    userService.findByUsername(userDetails.getUsername()).getLastName(),
+                    userService.findByUsername(userDetails.getUsername()).getAddress()
+
             );
 
             return ResponseEntity.ok()
@@ -158,7 +166,11 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(
                 "Authenticated",
                 user.getUsername(),
-                user.getRoles()
+                user.getRoles(),
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getAddress()
         ));
     }
 
