@@ -3,7 +3,8 @@ package se.java.security.dto;
 import se.java.security.models.Role;
 
 import java.util.Set;
-
+// added properties tha i want to return to the client
+// you can add whatever you wish/need for your project
 public class AuthResponse {
     private String jwtToken;
     private String username;

@@ -104,6 +104,7 @@ public class AuthController {
                     .build();
 
             // create response object
+            // updated due to update user profile method
             AuthResponse authResponse = new AuthResponse(
                     "Login successful",
                     userDetails.getUsername(),
@@ -163,6 +164,9 @@ public class AuthController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername());
 
+        // added getter for everything i can to return in the respond to the client
+        // also had to add them to login since we use the same DTO..
+        // a better solution would be to create two separate DTOs
         return ResponseEntity.ok(new AuthResponse(
                 "Authenticated",
                 user.getUsername(),
