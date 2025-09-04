@@ -55,6 +55,7 @@ public class SecurityConfig {
                         .requestMatchers("/orders/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/products/**").permitAll()
+                        .requestMatchers("/test/**").permitAll()
 
                         //.requestMatchers("/products/**").permitAll()
                         // any other requests the user need to be logged

@@ -1,15 +1,8 @@
 package se.java.security.controllers;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-import se.java.security.dto.OrderDTO;
-import se.java.security.dto.OrderResponse;
-import se.java.security.dto.OrderResponseDTO;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import se.java.security.services.OrderService;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/orders")
@@ -24,7 +17,7 @@ public class OrderController {
     public ResponseEntity<Order> createOrder(@RequestBody OrderDTO orderDTO) {
         Order newOrder = orderService.createOrder(orderDTO);
         return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
-    }*/
+    }
 
     @PostMapping
     @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
@@ -46,6 +39,8 @@ public class OrderController {
         List<OrderResponse> orders = orderService.getUserOrders(userId);
         return ResponseEntity.ok(orders);
     }
+    */
+
 }
 
 

@@ -8,19 +8,15 @@ import java.util.Map;
 
 // syfte: centralisera alla tillgängliga filter mekaniker som finns för varje produkt
 public class FilterRegistry {
-    // hashmap
+
     private static final Map<Class<? extends Product>, Map<String, ProductFilter<Product>>> FILTERS = new HashMap<>();
 
-    // static metod
     static {
         Map<String, ProductFilter<Product>> commonFilters = new HashMap<>();
-        // gemensamma strategier för alla produkter
-        // generella för alla produkter: namn, färg, minPrice, maxPrice
         commonFilters.put("name", value -> product ->
                 product.getName().toLowerCase().contains(value.toLowerCase()));
         commonFilters.put("color", value -> product ->
-                product.getColor().toLowerCase().contains(value.toLowerCase()));
-
+                product.getColor().equalsIgnoreCase(value));
         commonFilters.put("minPrice", value -> {
             double minPrice = Double.parseDouble(value);
             return product -> product.getPrice() >= minPrice;
@@ -32,19 +28,20 @@ public class FilterRegistry {
 
         FILTERS.put(Product.class, commonFilters);
 
-        // filter strategier för halsband (collar)
+        // Filters for Collar
         Map<String, ProductFilter<Product>> collarFilters = new HashMap<>(commonFilters);
-
         collarFilters.put("size", value -> product -> {
-            if(product instanceof Collar) {
+            if (product instanceof Collar) {
+                // Subclass-Specific Filters:
+                // Inom predikaten utför vi en instans av kontroll för att säkerställa att vi
+                // arbeta på rätt underklass före gjutning.
                 Collar collar = (Collar) product;
                 return collar.getSize().equalsIgnoreCase(value);
             }
             return false;
         });
-
         collarFilters.put("material", value -> product -> {
-            if(product instanceof Collar) {
+            if (product instanceof Collar) {
                 Collar collar = (Collar) product;
                 return collar.getMaterial().equalsIgnoreCase(value);
             }
@@ -53,19 +50,17 @@ public class FilterRegistry {
 
         FILTERS.put(Collar.class, collarFilters);
 
-        // filter strategier för koppel (leash)
+        // Filters for Leash
         Map<String, ProductFilter<Product>> leashFilters = new HashMap<>(commonFilters);
-
         leashFilters.put("length", value -> product -> {
-            if(product instanceof Leash) {
+            if (product instanceof Leash) {
                 Leash leash = (Leash) product;
                 return leash.getLength() == Double.parseDouble(value);
             }
             return false;
         });
-
         leashFilters.put("material", value -> product -> {
-            if(product instanceof Leash) {
+            if (product instanceof Leash) {
                 Leash leash = (Leash) product;
                 return leash.getMaterial().equalsIgnoreCase(value);
             }
@@ -74,7 +69,7 @@ public class FilterRegistry {
 
         FILTERS.put(Leash.class, leashFilters);
 
-        // filter strategier för leksaker (toy)
+        // Filters for Toy
         Map<String, ProductFilter<Product>> toyFilters = new HashMap<>(commonFilters);
         toyFilters.put("type", value -> product -> {
             if (product instanceof Toy) {
@@ -86,7 +81,7 @@ public class FilterRegistry {
 
         FILTERS.put(Toy.class, toyFilters);
 
-        // filter strategier för skålar (bowl)
+        // Filters for Bowl
         Map<String, ProductFilter<Product>> bowlFilters = new HashMap<>(commonFilters);
         bowlFilters.put("capacity", value -> product -> {
             if (product instanceof Bowl) {
@@ -98,9 +93,10 @@ public class FilterRegistry {
 
         FILTERS.put(Bowl.class, bowlFilters);
 
+
     }
 
-    // getter for filters
+    // Getter for filters
     public static Map<String, ProductFilter<Product>> getFiltersForType(Class<? extends Product> type) {
         return FILTERS.getOrDefault(type, Collections.emptyMap());
     }
