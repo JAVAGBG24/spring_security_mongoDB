@@ -2,37 +2,43 @@ package se.java.security.repository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
-import se.java.security.models.Category;
+import org.springframework.stereotype.Repository;
 import se.java.security.models.Product;
-import se.java.security.models.Sizes;
 
 import java.util.List;
 
-public interface ProductRepository extends MongoRepository<Product, String> {
-
-    List<Product> findByColor(String color);
-
-    List<Product> findByCategory(Category category);
-
-    List<Product> findByPriceBetween(Double minPrice, Double maxPrice);
-
-    // query to find products with a specific size in stock (quantity > 0)
-    @Query("{ 'inventory.?0': { $gt: 0 } }")
-    List<Product> findBySizeInStock(Sizes size);
-
-    // query to find products with inventory in a specific size within a range
-    @Query("{ 'inventory.?0': { $gte: ?1, $lte: ?2 } }")
-    List<Product> findBySizeInventoryBetween(Sizes size, int min, int max);
-
-    // query to find products by color and with a specific size in stock
-    @Query("{ 'color': ?0, 'inventory.?1': { $gt: 0 } }")
-    List<Product> findByColorAndSizeInStock(String color, Sizes size);
-
-    // query to find products by category and with a specific size in stock
-    @Query("{ 'category': ?0, 'inventory.?1': { $gt: 0 } }")
-    List<Product> findByCategoryAndSizeInStock(Category category, Sizes size);
-
-    // query to find products in a price range and with a specific size in stock
-    @Query("{ 'price': { $gte: ?0, $lte: ?1 }, 'inventory.?2': { $gt: 0 } }")
-    List<Product> findByPriceRangeAndSizeInStock(Double minPrice, Double maxPrice, Sizes size);
+/**
+ * GENERIC REPOSITORY INTERFACE for all Product types
+ * *
+ * PURPOSE: This interface provides database operations for any Product
+ * subclass while maintaining type safety.
+ * *
+ * GENERIC EXPLANATION:
+ * - <T extends Product>: T is a type parameter that must be Product or
+ * any subclass of Product
+ * - This allows the same repository interface to work with Collar, Leash, Toy, Bowl, etc.
+ * - Each implementation can be type-safe for its specific product type
+ * *
+ * EXTENDS MongoRepository<T, String>:
+ * - Inherits all standard CRUD operations (save, findAll, findById, delete, etc.)
+ * - T is the entity type (Product subclass)
+ * - String is the ID type (MongoDB uses String IDs)
+ * *
+ * CUSTOM QUERY EXPLANATION:
+ * - @Query("{ '_class' : ?0 }"): Creates a MongoDB query that filters by the _class field
+ * - ?0 represents the first parameter (typeAlias)
+ * - This query runs at DATABASE LEVEL, not in Java memory
+ * - Only returns documents matching the specified class type
+ * - Much more efficient than loading all products and filtering in Java
+ * *
+ * EXAMPLE USAGE:
+ * - findByProductType("com.example.security.models.Collar") returns
+ * only Collar documents
+ * - This leverages MongoDB's automatic _class field that tracks the
+ * Java class of each document
+ */
+@Repository
+public interface ProductRepository<T extends Product> extends MongoRepository<T, String> {
+    @Query("{ '_class' : ?0 }")
+    List<Product> findByProductType(String typeAlias);
 }

@@ -1,43 +1,54 @@
 package se.java.security.models;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import org.springframework.data.annotation.CreatedDate;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
-import java.util.Map;
-
+/**
+ * ABSTRACT BASE CLASS for all pet products in the system.
+ * PURPOSE: This class enables POLYMORPHIC STORAGE - storing different types of pet products
+ *  (collars, leashes, toys, bowls) in a SINGLE MongoDB collection called "products" while
+ *  maintaining type safety and specific properties for each subclass.
+ *  *
+ * JACKSON ANNOTATIONS EXPLAINED:
+ * - @JsonTypeInfo: Tells Jackson to include type information when serializing/deserializing JSON
+ * - use = JsonTypeInfo.Id.NAME: Uses the "name" attribute from @JsonSubTypes as the type identifier
+ * - include = JsonTypeInfo.As.PROPERTY: Adds the type info as a JSON property
+ * - property = "productType": The JSON field name that will contain the type (e.g., "collar", "leash")
+ *  *
+ * - @JsonSubTypes: Maps JSON productType values to specific Java classes
+ * - When JSON contains "productType": "collar" → creates Collar.class instance
+ * - When JSON contains "productType": "leash" → creates Leash.class instance
+ * - When JSON contains "productType": "toy" → creates Toy.class instance
+ * - When JSON contains "productType": "bowl" → creates Bowl.class instance
+ *  *
+ * MONGODB BEHAVIOR:
+ * - @Document(collection = "products"): All subclasses are stored in the same "products" collection
+ * - MongoDB automatically adds a "_class" field to track the actual Java class for each document
+ */
 @Document(collection = "products")
-public class Product {
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "productType")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Collar.class, name = "collar"),
+        @JsonSubTypes.Type(value = Leash.class, name = "leash"),
+        @JsonSubTypes.Type(value = Toy.class, name = "toy"),
+        @JsonSubTypes.Type(value = Bowl.class, name = "bowl")
+})
+public abstract class Product {
 
     @Id
     private String id;
-
-    @NotBlank(message = "Product name cannot be empty")
     private String name;
-
-    @NotNull(message = "Price is required")
-    @Positive(message = "Price must be greater than 0")
-    private Double price;
-
-    private String color;
-
-    private Map<Sizes, Integer> inventory;
-
-    private Category category;
-
-    private boolean inStock;
-
-    private String image;
-
     private String description;
+    private String color;
+    private double price;
+    private int stockQuantity;
 
-    @CreatedDate
-    private Date createdAt;
-
+    // Default constructor required by Jackson for JSON deserialization and MongoDB
     public Product() {
     }
 
@@ -49,20 +60,12 @@ public class Product {
         this.id = id;
     }
 
-    public @NotBlank String getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(@NotBlank String name) {
+    public void setName(String name) {
         this.name = name;
-    }
-
-    public @NotNull Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(@NotNull Double price) {
-        this.price = price;
     }
 
     public String getDescription() {
@@ -73,22 +76,6 @@ public class Product {
         this.description = description;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public String getColor() {
         return color;
     }
@@ -97,64 +84,19 @@ public class Product {
         this.color = color;
     }
 
-
-    public Category getCategory() {
-        return category;
+    public double getPrice() {
+        return price;
     }
 
-    public void setCategory(Category category) {
-        this.category = category;
+    public void setPrice(double price) {
+        this.price = price;
     }
 
-
-    public Map<Sizes, Integer> getInventory() {
-        return inventory;
+    public int getStockQuantity() {
+        return stockQuantity;
     }
 
-    public void setInventory(Map<Sizes, Integer> inventory) {
-        this.inventory = inventory;
-    }
-
-
-    public boolean isInStock() {
-        if (inventory == null || inventory.isEmpty()) {
-            return false;
-        }
-        return inventory.values().stream().anyMatch(quantity -> quantity > 0);
-    }
-
-    public boolean isInStock(Sizes size) {
-        if (inventory == null) {
-            return false;
-        }
-        Integer quantity = inventory.get(size);
-        return quantity != null && quantity > 0;
-    }
-
-    public Integer getInventoryCount(Sizes size) {
-        if (inventory == null) {
-            return 0;
-        }
-        return inventory.getOrDefault(size, 0);
-    }
-
-    public void updateInventory(Sizes size, int quantity) {
-        if (inventory == null) {
-            throw new IllegalStateException("Inventory map is not initialized");
-        }
-        inventory.put(size, quantity);
-    }
-
-    public void decrementInventory(Sizes size, int amount) {
-        if (inventory == null) {
-            throw new IllegalStateException("Inventory map is not initialized");
-        }
-
-        int currentQuantity = inventory.getOrDefault(size, 0);
-        if (currentQuantity < amount) {
-            throw new IllegalArgumentException("Not enough inventory for size " + size);
-        }
-
-        inventory.put(size, currentQuantity - amount);
+    public void setStockQuantity(int stockQuantity) {
+        this.stockQuantity = stockQuantity;
     }
 }
