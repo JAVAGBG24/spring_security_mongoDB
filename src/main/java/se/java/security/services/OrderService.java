@@ -1,28 +1,9 @@
 package se.java.security.services;
 
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import se.java.security.dto.OrderDTO;
-import se.java.security.dto.OrderItemDTO;
-import se.java.security.dto.OrderResponse;
-import se.java.security.dto.OrderResponseDTO;
-import se.java.security.exceptions.ResourceNotFoundException;
-import se.java.security.exceptions.UnauthorizedException;
-import se.java.security.models.Order;
-import se.java.security.models.Product;
-import se.java.security.models.User;
 import se.java.security.repository.OrderRepository;
 import se.java.security.repository.ProductRepository;
 import se.java.security.repository.UserRepository;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -36,7 +17,7 @@ public class OrderService {
         this.userRepository = userRepository;
     }
 
-
+/*
 
     // skapa en ny order
     // byter typ när vi gjort OrderResponseDTO från Order
@@ -89,12 +70,13 @@ public class OrderService {
         return orders.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());*/
+    /*
     }
 
     public List<OrderResponse> getUserOrders(String userId) {
         /*User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("user not found"));*/
-
+/*
         if(!userRepository.existsById(userId)) {
             throw new IllegalArgumentException("User not found");
         }
@@ -151,7 +133,7 @@ public class OrderService {
     }
 
 
-
+*/
 
 
 
