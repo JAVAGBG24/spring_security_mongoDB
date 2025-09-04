@@ -2,6 +2,7 @@ package se.java.security.filter;
 
 import se.java.security.models.*;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -99,7 +100,8 @@ public class FilterRegistry {
 
     }
 
-
-
     // getter for filters
+    public static Map<String, ProductFilter<Product>> getFiltersForType(Class<? extends Product> type) {
+        return FILTERS.getOrDefault(type, Collections.emptyMap());
+    }
 }

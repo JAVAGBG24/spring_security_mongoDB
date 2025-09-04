@@ -1,0 +1,126 @@
+[
+  {
+    "productType": "collar",
+    "name": "Premium Leather Collar",
+    "description": "High-quality leather collar for dogs",
+    "color": "brown",
+    "price": 29.99,
+    "stockQuantity": 25,
+    "size": "M",
+    "material": "leather"
+  },
+  {
+    "productType": "collar",
+    "name": "Nylon Training Collar",
+    "description": "Adjustable nylon collar for training",
+    "color": "red",
+    "price": 15.50,
+    "stockQuantity": 40,
+    "size": "L",
+    "material": "nylon"
+  },
+  {
+    "productType": "collar",
+    "name": "Small Puppy Collar",
+    "description": "Soft collar for small puppies",
+    "color": "blue",
+    "price": 12.99,
+    "stockQuantity": 60,
+    "size": "S",
+    "material": "fabric"
+  },
+  {
+    "productType": "collar",
+    "name": "Designer Red Collar",
+    "description": "Stylish red collar with studs",
+    "color": "red",
+    "price": 45.00,
+    "stockQuantity": 15,
+    "size": "M",
+    "material": "leather"
+  },
+  {
+    "productType": "leash",
+    "name": "Retractable Leash",
+    "description": "6-foot retractable leash",
+    "color": "black",
+    "price": 22.99,
+    "stockQuantity": 30,
+    "length": 6.0,
+    "material": "nylon"
+  },
+  {
+    "productType": "leash",
+    "name": "Chain Training Leash",
+    "description": "Heavy-duty chain leash for large dogs",
+    "color": "silver",
+    "price": 35.50,
+    "stockQuantity": 20,
+    "length": 4.0,
+    "material": "chain"
+  },
+  {
+    "productType": "leash",
+    "name": "Leather Walking Leash",
+    "description": "Premium leather walking leash",
+    "color": "brown",
+    "price": 28.00,
+    "stockQuantity": 25,
+    "length": 5.0,
+    "material": "leather"
+  },
+  {
+    "productType": "toy",
+    "name": "Squeaky Ball",
+    "description": "Rubber squeaky ball for fetch",
+    "color": "yellow",
+    "price": 8.99,
+    "stockQuantity": 100,
+    "type": "ball"
+  },
+  {
+    "productType": "toy",
+    "name": "Rope Toy",
+    "description": "Cotton rope toy for chewing",
+    "color": "white",
+    "price": 6.50,
+    "stockQuantity": 80,
+    "type": "rope"
+  },
+  {
+    "productType": "toy",
+    "name": "Interactive Puzzle",
+    "description": "Brain training puzzle toy",
+    "color": "blue",
+    "price": 24.99,
+    "stockQuantity": 35,
+    "type": "puzzle"
+  },
+  {
+    "productType": "bowl",
+    "name": "Stainless Steel Bowl",
+    "description": "Non-slip stainless steel bowl",
+    "color": "silver",
+    "price": 16.99,
+    "stockQuantity": 50,
+    "capacity": 2.0
+  },
+  {
+    "productType": "bowl",
+    "name": "Ceramic Food Bowl",
+    "description": "Decorative ceramic bowl",
+    "color": "blue",
+    "price": 19.50,
+    "stockQuantity": 40,
+    "capacity": 1.5
+  },
+  {
+    "productType": "bowl",
+    "name": "Large Water Bowl",
+    "description": "Extra large water bowl",
+    "color": "black",
+    "price": 13.25,
+    "stockQuantity": 30,
+    "capacity": 3.0
+  }
+]
