@@ -1,15 +1,5 @@
 package se.java.security.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import se.java.security.models.Product;
-import se.java.security.services.ProductService;
-
-import java.util.List;
-import java.util.Optional;
-
 /**
  * BASIC CRUD REST CONTROLLER
  * *
@@ -31,6 +21,7 @@ import java.util.Optional;
  * - Uses ProductService<Product> to work with any Product subclass
  * - JSON serialization/deserialization handled automatically by Jackson using the @JsonTypeInfo annotations
  */
+/*
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/test")
@@ -71,4 +62,4 @@ public class ProductController {
         productService.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }
-}
+}*/

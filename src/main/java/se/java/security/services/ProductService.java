@@ -1,14 +1,5 @@
 package se.java.security.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import se.java.security.exceptions.ResourceNotFoundException;
-import se.java.security.models.Product;
-import se.java.security.repository.ProductRepository;
-
-import java.util.List;
-import java.util.Optional;
-
 /**
  *GENERIC CRUD SERVICE CLASS
  * *
@@ -24,6 +15,7 @@ import java.util.Optional;
  * DEPENDENCY INJECTION:
  *- The generic type T is resolved at runtime based on how the service is instantiated
  */
+/*
 @Service
 public class ProductService <T extends Product> {
     private final ProductRepository<T> productRepository;
@@ -64,4 +56,4 @@ public class ProductService <T extends Product> {
         }
         productRepository.deleteById(id);
     }
-}
+}*/
