@@ -78,6 +78,10 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
             filterHandlers.put("size", (crit, value) -> crit.and("size").is(value));
         }
 
+        if(Leash.class.equals(productclass)) {
+            filterHandlers.put("length", (crit, value) -> crit.and("length").is(Double.parseDouble(value)));
+        }
+
         if(Leash.class.equals(productclass) || Collar.class.equals(productclass)) {
             filterHandlers.put("material", (crit, value) -> crit.and("material").is(value));
         }
@@ -96,6 +100,9 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
         // STEG 6: produkttyp filtrering
         String productTypeAlias = getProductTypeAlias(productclass);
         criteria.and("_class").is(productTypeAlias);
+
+        // OBS GLÖMDE...
+        query.addCriteria(criteria);
 
         // STEG 7: köra query
         // mongoTemplate.find kommer returnera en List<T> där T är den produkten vi specificerar
