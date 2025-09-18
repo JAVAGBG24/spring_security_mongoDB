@@ -19,10 +19,6 @@ import java.util.Map;
  * INTERFACE SEGREGATION PRINCIPLE:
  * Vi skapar ett separat interface för våra custom metoder istället för att
  * stoppa in allt i en stor interface. Detta gör koden mer modulär och testbar.
- * *
- * FÖRBEREDER FÖR STRATEGY PATTERN:
- * Interfacet förbereder för en filter-strategy som kommer implementeras senare.
- * Flexibla filter-parametrar möjliggör olika filtreringsstrategier utan kod-ändringar.
  */
 public interface CustomProductRepository {
     /**
