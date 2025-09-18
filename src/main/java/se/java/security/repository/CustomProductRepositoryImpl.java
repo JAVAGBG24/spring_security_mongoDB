@@ -39,6 +39,8 @@ public class CustomProductRepositoryImpl implements CustomProductRepository {
      * 4. Applicera alla filter från input-map
      * 5. Lägg till produktfilter baserat på @TypeAlias
      * 6. Köra Query och returnera resultat
+     * *
+     * CRITERIA BYGGS UPP STEG FÖR STEG MED METHOD CHAINING
      */
     @Override
     public List<Product> findProductByCriteria(Map<String, String> filters, Class<? extends Product> productclass) {

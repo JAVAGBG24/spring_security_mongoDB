@@ -20,7 +20,14 @@ public class FilterProductService {
 
     // FILTER METOD
     public List<Product> filterProducts(Map<String, String> params) {
+        // STEG 1: affärslogiken för produkttyp
+        String productTypeAlias = getProductType(params.get("productType"));
 
+        // STEG 2: konvertering till data access representation
+        Class<? extends Product> productClass = getProductClassFromAlias(productTypeAlias);
+
+        // STEG 3: delegera data till access layer för den faktiska filtreringen
+        return productRepository.findProductByCriteria(params, productClass);
     }
 
     private String getProductType(String typeName) {
